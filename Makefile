@@ -9,11 +9,13 @@ TESTDIR := test
 BUILDDIR := build
 EXECDIR := bin
 TARGET := $(EXECDIR)/run
+TEST_TARGET := $(EXECDIR)/test
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 TESTS := $(shell find $(TESTDIR) -type f -name *_test.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+OBJECTS := $(filter-out build/main.o, $(OBJECTS))
 TEST_OBJECTS := $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTS:.$(SRCEXT)=.o))
 CFLAGS := -Wall -pedantic -std=c++11 -isystem $(GTEST_DIR)/include
 LIB := -pthread
@@ -21,7 +23,7 @@ INC := -I include
 
 TEST_TARGETS := $(EXECDIR)/$(basename $(notdir $(TESTS)))
 
-$(TARGET): $(OBJECTS)
+$(TARGET): build/main.o $(OBJECTS)
 	@echo "Linking..."
 	$(CC) $^ -o $(TARGET) $(LIB)
 
@@ -29,7 +31,10 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-tests: $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a 
+test: $(TEST_TARGET)
+	./bin/test
+
+$(TEST_TARGET): build/gtest_main.a $(TEST_OBJECTS) $(OBJECTS)
 	@echo "Linking..."
 	$(CC) $^ -o bin/test $(LIB)
 
