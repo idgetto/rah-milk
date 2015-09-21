@@ -13,8 +13,8 @@ TARGET := $(EXECDIR)/run
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 TESTS := $(shell find $(TESTDIR) -type f -name *_test.$(SRCEXT))
-OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o)) \
-			$(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTS:.$(SRCEXT)=.o))
+OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
+TEST_OBJECTS := $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTS:.$(SRCEXT)=.o))
 CFLAGS := -Wall -pedantic -std=c++11 -isystem $(GTEST_DIR)/include
 LIB := -pthread
 INC := -I include 
@@ -23,23 +23,23 @@ TEST_TARGETS := $(EXECDIR)/$(basename $(notdir $(TESTS)))
 
 $(TARGET): $(OBJECTS)
 	@echo "Linking..."
-	@echo "$(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
+	$(CC) $^ -o $(TARGET) $(LIB)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
-	@echo "$(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-tests: $(OBJECTS) build/gtest_main.a 
+tests: $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a 
 	@echo "Linking..."
-	$(CC) $^ -o $(TEST_TARGETS) $(LIB)
+	$(CC) $^ -o bin/test $(LIB)
 
 $(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT)
 	@mkdir -p $(BUILDDIR)
-	@echo "$(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
 	@echo "Cleaning..."; 
-	$(RM) -rf $(BUILDDIR)/* $(EXECDIR)/* $(TARGET)/*
+	$(RM) -rf $(BUILDDIR)/*.o $(EXECDIR)/* $(TARGET)
 
 .PHONY: clean
 
