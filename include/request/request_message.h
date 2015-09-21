@@ -15,6 +15,7 @@ public:
 
 private:
     unique_ptr<RequestMethod> _requestMethod;
+    unique_ptr<RequestTarget> _requestTarget;
 };
 
 #endif
