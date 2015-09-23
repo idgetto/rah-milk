@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "request/request_method.h"
+#include "request/request_target.h"
 
 using std::string;
 using std::unique_ptr;
