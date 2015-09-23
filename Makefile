@@ -3,7 +3,15 @@
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
-CC := clang++
+# # Flags passed to the preprocessor.
+# # Set Google Test's header directory as a system directory, such that
+# # the compiler doesn't generate warnings in Google Test headers.
+CPPFLAGS += -isystem $(GTEST_DIR)/include
+# 
+# # Flags passed to the C++ compiler.
+CXXFLAGS += -g -Wall -Wextra -std=c++11 -pthread
+
+CXX := clang++
 SRCDIR := src
 TESTDIR := test
 BUILDDIR := build
@@ -17,47 +25,52 @@ TESTS := $(shell find $(TESTDIR) -type f -name *_test.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 OBJECTS := $(filter-out build/main.o, $(OBJECTS))
 TEST_OBJECTS := $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTS:.$(SRCEXT)=.o))
-CFLAGS := -Wall -pedantic -std=c++11 -isystem $(GTEST_DIR)/include
+CFLAGS := -Wall -pedantic -std=c++11 
 LIB := -pthread
-INC := -I include 
+INC := -I include
 
 TEST_TARGETS := $(EXECDIR)/$(basename $(notdir $(TESTS)))
 
+# 
+# sample1.o : $(USER_DIR)/sample1.cc $(USER_DIR)/sample1.h $(GTEST_HEADERS)
+# 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1.cc
+# 
+# sample1_unittest.o : $(USER_DIR)/sample1_unittest.cc \
+#                      $(USER_DIR)/sample1.h $(GTEST_HEADERS)
+# 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1_unittest.cc
+# 
+# sample1_unittest : sample1.o sample1_unittest.o gtest_main.a
+# 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
+# 
+
 $(TARGET): build/main.o $(OBJECTS)
 	@echo "Linking..."
-	$(CC) $^ -o $(TARGET) $(LIB)
+	$(CXX) $^ -o $@ $(LIB)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) $(GTEST_HEADERS)
 	@mkdir -p $(BUILDDIR)
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@ 
 
 test: $(TEST_TARGET)
 	./bin/test
 
-$(TEST_TARGET): build/gtest_main.a $(TEST_OBJECTS) $(OBJECTS)
+$(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a 
 	@echo "Linking..."
-	$(CC) $^ -o bin/test $(LIB)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) $^ -o $@ 
 
-$(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT)
+$(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) $(GTEST_HEADERS)
 	@mkdir -p $(BUILDDIR)
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@ 
 
 clean:
 	@echo "Cleaning..."; 
-	$(RM) -rf $(BUILDDIR)/*.o $(EXECDIR)/* $(TARGET)
+	find $(BUILDDIR) $(EXECDIR) -type f -exec rm {} +
 
 .PHONY: clean
 
 # # Where to find user code.
 # USER_DIR = ../samples
 # 
-# # Flags passed to the preprocessor.
-# # Set Google Test's header directory as a system directory, such that
-# # the compiler doesn't generate warnings in Google Test headers.
-CPPFLAGS += -isystem $(GTEST_DIR)/include
-# 
-# # Flags passed to the C++ compiler.
-CXXFLAGS += -g -Wall -Wextra -pthread
 # 
 # # All tests produced by this Makefile.  Remember to add new tests you
 # # created to the list.
