@@ -1,9 +1,13 @@
+#include <stdexcept>
+
 #include "gtest/gtest.h"
 #include "request/request_method.h"
 
-using std::unique_ptr;
-
 TEST(RequestMethod, fromString) {
-    unique_ptr<RequestMethod> method = RequestMethod::fromString("");
-    EXPECT_NE(nullptr, method);
+    RequestMethod method = RequestMethod::fromString("GET");
+    EXPECT_EQ(RequestMethod::GET, method);
+
+    EXPECT_THROW(RequestMethod::fromString(""), std::invalid_argument);
+    EXPECT_THROW(RequestMethod::fromString("get"), std::invalid_argument);
+    EXPECT_THROW(RequestMethod::fromString("Put"), std::invalid_argument);
 }
