@@ -2,6 +2,7 @@
 #define HTTP_VERSION_H
 
 #include <string>
+#include <ostream>
 #include <boost/xpressive/xpressive.hpp>
 
 #include "basic_regex.h"
@@ -23,6 +24,7 @@
                                 "(?P<" MINOR_VERSION_NAME ">" DIGIT ")" \
                              ")"
 
+using std::ostream;
 using std::string;
 using boost::xpressive::sregex;
 
@@ -30,6 +32,7 @@ class HttpVersion {
 public:
     const static sregex HTTP_VERSION_CAPTURE_REGEX;
 
+    HttpVersion() {}
     HttpVersion(const string& httpVersionString);
 
     int getMajorVersion() const;
@@ -38,5 +41,7 @@ private:
     int _majorVersion;
     int _minorVersion;
 };
+
+ostream& operator<<(ostream&, const HttpVersion& httpVersion);
 
 #endif

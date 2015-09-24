@@ -7,12 +7,13 @@ using std::string;
 
 class StatusCode {
 private:
-    StatusCode(unsigned number, const string& reason);
-
     unsigned _number;
     string _reason;
 
 public:
+    StatusCode() {}
+    StatusCode(unsigned number, const string& reason);
+
     unsigned getNumber() const;
     const string& getReason() const;
 

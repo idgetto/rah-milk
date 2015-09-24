@@ -32,3 +32,10 @@ int HttpVersion::getMajorVersion() const {
 int HttpVersion::getMinorVersion() const {
     return _minorVersion;
 }
+
+ostream& operator<<(ostream& out, const HttpVersion& httpVersion) {
+    return out << "HTTP/" 
+               << httpVersion.getMajorVersion() 
+               << "." 
+               << httpVersion.getMinorVersion();
+}
