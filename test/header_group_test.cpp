@@ -10,7 +10,7 @@ TEST(HeaderGroup, add) {
     headers.add("name", "value");
     
     EXPECT_TRUE(headers.contains("name"));
-    EXPECT_EQ("value", headers.getFirst("name"));
+    EXPECT_EQ(hpair("name", "value"), headers.getFirst("name"));
 }
 
 TEST(HeaderGroup, getFirst) {
@@ -18,7 +18,7 @@ TEST(HeaderGroup, getFirst) {
     headers.add("foo", "bar");
     headers.add("foo", "asdf");
 
-    EXPECT_EQ("bar", headers.getFirst("foo"));
+    EXPECT_EQ(hpair("foo", "bar"), headers.getFirst("foo"));
 }
 
 TEST(HeaderGroup, getLast) {
@@ -26,7 +26,7 @@ TEST(HeaderGroup, getLast) {
     headers.add("foo", "bar");
     headers.add("foo", "asdf");
 
-    EXPECT_EQ("asdf", headers.getLast("foo"));
+    EXPECT_EQ(hpair("foo", "asdf"), headers.getLast("foo"));
 }
 
 TEST(HeaderGroup, getAll) {
@@ -34,7 +34,7 @@ TEST(HeaderGroup, getAll) {
     headers.add("foo", "bar");
     headers.add("foo", "asdf");
 
-    vector<string> v  = { "bar", "asdf" };
+    vector<hpair> v  = { hpair("foo", "bar"), hpair("foo", "asdf") };
     EXPECT_EQ(v, headers.getAll("foo"));
 }
 
@@ -43,9 +43,9 @@ TEST(HeaderGroup, removeFirst) {
     headers.add("foo", "bar");
     headers.add("foo", "asdf");
 
-    EXPECT_EQ("bar", headers.removeFirst("foo"));
+    EXPECT_EQ(hpair("foo", "bar"), headers.removeFirst("foo"));
     EXPECT_EQ(1, headers.count("foo"));
-    EXPECT_EQ("asdf", headers.getFirst("foo"));
+    EXPECT_EQ(hpair("foo", "asdf"), headers.getFirst("foo"));
 }
 
 TEST(HeaderGroup, removeLast) {
@@ -53,9 +53,9 @@ TEST(HeaderGroup, removeLast) {
     headers.add("foo", "bar");
     headers.add("foo", "asdf");
 
-    EXPECT_EQ("asdf", headers.removeLast("foo"));
+    EXPECT_EQ(hpair("foo", "asdf"), headers.removeLast("foo"));
     EXPECT_EQ(1, headers.count("foo"));
-    EXPECT_EQ("bar", headers.getFirst("foo"));
+    EXPECT_EQ(hpair("foo", "bar"), headers.getFirst("foo"));
 }
 
 TEST(HeaderGroup, removeAll) {
@@ -63,7 +63,7 @@ TEST(HeaderGroup, removeAll) {
     headers.add("foo", "bar");
     headers.add("foo", "asdf");
 
-    vector<string> v = { "bar", "asdf" };
+    vector<hpair> v = { hpair("foo", "bar"), hpair("foo", "asdf") };
     EXPECT_EQ(v, headers.removeAll("foo"));
     EXPECT_FALSE(headers.contains("foo"));
 }

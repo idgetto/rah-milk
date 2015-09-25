@@ -4,10 +4,14 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <utility>
 
 using std::string;
 using std::multimap;
 using std::vector;
+
+using hpair = std::pair<string, string>;
+using map_t = multimap<string, string>;
 
 class HeaderGroup {
 public:
@@ -16,17 +20,17 @@ public:
 
     void add(const string& key, const string& val);
 
-    string getFirst(const string& key) const;
-    string getLast(const string& key) const;
-    vector<string> getAll(const string& key) const;
+    hpair getFirst(const string& key) const;
+    hpair getLast(const string& key) const;
+    vector<hpair> getAll(const string& key) const;
 
-    string removeFirst(const string& key);
-    string removeLast(const string& key);
-    vector<string> removeAll(const string& key);
+    hpair removeFirst(const string& key);
+    hpair removeLast(const string& key);
+    vector<hpair> removeAll(const string& key);
 
 private:
-    multimap<string, string> _mmap;
-    multimap<string, string>::const_iterator findLast(const string& key) const;
+    map_t _mmap;
+    map_t::const_iterator findLast(const string& key) const;
 };
 
 #endif
