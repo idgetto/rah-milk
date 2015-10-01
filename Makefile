@@ -16,6 +16,7 @@ SRCDIR := src
 TESTDIR := test
 BUILDDIR := build
 EXECDIR := bin
+INCLUDEDIR := include
 TARGET := $(EXECDIR)/run
 TEST_TARGET := $(EXECDIR)/test
 
@@ -27,7 +28,10 @@ OBJECTS := $(filter-out build/main.o, $(OBJECTS))
 TEST_OBJECTS := $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTS:.$(SRCEXT)=.o))
 CFLAGS := -Wall -pedantic -std=c++11 
 LIB := -pthread
-INC := -I include
+INC := -I $(INCLUDEDIR)
+HEADERS := $(shell find $(INCLUDEDIR) -type f -name *.h)
+HEADERS := $(filter-out "*_test.h", $(HEADERS))
+TEST_HEADERS := $(shell find $(INCLUDEDIR) -type f -name *_test.h)
 
 TEST_TARGETS := $(EXECDIR)/$(basename $(notdir $(TESTS)))
 
@@ -47,7 +51,7 @@ $(TARGET): build/main.o $(OBJECTS)
 	@echo "Linking..."
 	$(CXX) $^ -o $@ $(LIB)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) $(GTEST_HEADERS)
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) $(HEADERS) $(GTEST_HEADERS)
 	@mkdir -p $(BUILDDIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@ 
 
@@ -58,7 +62,7 @@ $(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a
 	@echo "Linking..."
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) $^ -o $@ 
 
-$(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) $(GTEST_HEADERS)
+$(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) $(TEST_HEADERS) $(GTEST_HEADERS)
 	@mkdir -p $(BUILDDIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@ 
 
@@ -66,7 +70,7 @@ clean:
 	@echo "Cleaning..."; 
 	find $(BUILDDIR) $(EXECDIR) -type f -exec rm {} +
 
-.PHONY: clean
+.PHONY: clean test
 
 # # Where to find user code.
 # USER_DIR = ../samples
