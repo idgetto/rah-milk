@@ -30,8 +30,6 @@ CFLAGS := -Wall -pedantic -std=c++11
 LIB := -pthread
 INC := -I $(INCLUDEDIR)
 HEADERS := $(shell find $(INCLUDEDIR) -type f -name *.h)
-HEADERS := $(filter-out "*_test.h", $(HEADERS))
-TEST_HEADERS := $(shell find $(INCLUDEDIR) -type f -name *_test.h)
 
 TEST_TARGETS := $(EXECDIR)/$(basename $(notdir $(TESTS)))
 
@@ -62,7 +60,7 @@ $(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a
 	@echo "Linking..."
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) $^ -o $@ 
 
-$(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) $(TEST_HEADERS) $(GTEST_HEADERS)
+$(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) $(HEADERS) $(GTEST_HEADERS)
 	@mkdir -p $(BUILDDIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@ 
 

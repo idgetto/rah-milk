@@ -1,91 +1,82 @@
 #include <stdexcept>
+#include <algorithm>
+#include <iterator>
 
 #include "header_group.h"
 
-using std::runtime_error;
+using std::invalid_argument;
+using std::begin;
+using std::end;
+
+const string HeaderGroup::SET_COOKIE_KEY = "Set-Cookie";
 
 bool HeaderGroup::contains(const string& key) const {
-    return _mmap.count(key) != 0;
-}
-
-unsigned HeaderGroup::count(const string& key) const {
-    return _mmap.count(key);
+    return find(begin(_keys), end(_keys), key) != end(_keys);
 }
 
 void HeaderGroup::add(const string& key, const string& val) {
-    _mmap.emplace(key, val);
-}
-
-hpair HeaderGroup::getFirst(const string& key) const {
-    if (!contains(key)) {
-        throw runtime_error("key not found");
+    if (contains(key)) {
+        throw invalid_argument("key is not unique");
+    }
+    if (key == HeaderGroup::SET_COOKIE_KEY) {
+        throw invalid_argument("set cookie using HeaderGoup::addCookie");
     }
 
-    return *_mmap.find(key);
+    _keys.push_back(key);
+    _vals.push_back(val);
 }
 
-hpair HeaderGroup::getLast(const string& key) const {
+string HeaderGroup::get(const string& key) const {
     if (!contains(key)) {
-        throw runtime_error("key not found");
+        throw invalid_argument("key not found");
     }
-    
-    return *findLast(key);
+    auto it = find(begin(_keys), end(_keys), key);
+    auto index = distance(begin(_keys), it);
+    return _vals[index];
 }
 
-vector<hpair> HeaderGroup::getAll(const string& key) const {
+string HeaderGroup::remove(const string& key) {
     if (!contains(key)) {
-        throw runtime_error("key not found");
+        throw invalid_argument("key not found");
     }
+    auto it = find(begin(_keys), end(_keys), key);
+    auto index = distance(begin(_keys), it);
+    string val = _vals[index];
 
-    vector<hpair> res;
-    for (auto it = _mmap.begin(); it != _mmap.end(); ++it) {
-        res.push_back(*it);
-    } 
-    return res;
-}
-
-hpair HeaderGroup::removeFirst(const string& key) {
-    if (!contains(key)) {
-        throw runtime_error("key not found");
-    }
-
-    auto it = _mmap.find(key);
-    hpair val = *it;
-    _mmap.erase(it);
+    _keys.erase(begin(_keys) + index);
+    _vals.erase(begin(_vals) + index);
 
     return val;
 }
 
-hpair HeaderGroup::removeLast(const string& key) {
-    if (!contains(key)) {
-        throw runtime_error("key not found");
-    }
-
-    auto it = findLast(key); 
-    hpair val = *it;
-    _mmap.erase(it);
-
-    return val;
+void HeaderGroup::addCookie(const string& val) {
+    _cookies.push_back(val);
 }
 
-vector<hpair> HeaderGroup::removeAll(const string& key) {
-    if (!contains(key)) {
-        throw runtime_error("key not found");
-    }
-   
-    vector<hpair> res;
-    for (auto it = _mmap.begin(); it != _mmap.end(); ++it) {
-        res.push_back(*it);
-        _mmap.erase(it);    
-    } 
-    return res;
+const vector<string>& HeaderGroup::getCookies() const {
+    return _cookies;
 }
 
-map_t::const_iterator HeaderGroup::findLast(const string& key) const {
-    for (auto it = _mmap.crbegin(); it != _mmap.crend(); ++it) {
-        if (key == it->first) {
-            return (++it).base();
-        }
+void HeaderGroup::clearCookies() {
+    _cookies.clear();
+}
+
+ostream& operator<<(ostream& out, const HeaderGroup& headerGroup) {
+    for (vector<string>::size_type index = 0;
+         index < headerGroup._keys.size();
+         ++index) {
+        out << headerGroup._keys[index]
+            << ": "
+            << headerGroup._vals[index]
+            << "\r\n";
     }
-    return _mmap.cend();
+
+    for (const string& cookie : headerGroup.getCookies()) {
+        out << HeaderGroup::SET_COOKIE_KEY
+            << ": "
+            << cookie
+            << "\r\n";
+    }
+
+    return out;
 }

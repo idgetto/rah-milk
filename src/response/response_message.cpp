@@ -16,6 +16,18 @@ void ResponseMessage::setHttpVersion(const HttpVersion& httpVersion) {
     _httpVersion = httpVersion;
 }
 
+HeaderGroup& ResponseMessage::getHeaderGroup() {
+    return _headerGroup;
+}
+
+const HeaderGroup& ResponseMessage::getHeaderGroup() const {
+    return _headerGroup;
+}
+
+void ResponseMessage::setHeaderGroup(const HeaderGroup& headerGroup) {
+    _headerGroup = headerGroup;
+}
+
 ostream& operator<<(ostream& out, const ResponseMessage& resp) {
     stringstream ss;
 
@@ -23,6 +35,9 @@ ostream& operator<<(ostream& out, const ResponseMessage& resp) {
     ss << resp.getHttpVersion() << " "
        << resp.getStatusCode().getNumber() << " "
        << resp.getStatusCode().getReason() << "\r\n";
+
+    // add the headers
+    ss << resp.getHeaderGroup();
 
     return out << ss.str();
 }

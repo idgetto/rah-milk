@@ -1,5 +1,12 @@
+#include <stdexcept>
+
 #include "gtest/gtest.h"
 #include "header_group.h"
+
+#include <sstream>
+
+using std::invalid_argument;
+using std::stringstream;
 
 TEST(HeaderGroup, constructor) {
     HeaderGroup headers;
@@ -8,62 +15,122 @@ TEST(HeaderGroup, constructor) {
 TEST(HeaderGroup, add) {
     HeaderGroup headers;
     headers.add("name", "value");
+    headers.add("foo", "bar");
+    headers.add("Connection", "keep-alive");
+
+    // TODO: This should not throw, it just adds the value to the list
+    EXPECT_THROW(headers.add("name", "other"), invalid_argument);
+    EXPECT_THROW(headers.add("Set-Cookie", "a=b"), invalid_argument);
+    EXPECT_EQ("value", headers.get("name"));
+}
+
+TEST(HeaderGroup, get) {
+    HeaderGroup headers;
+    headers.add("name", "value");
+    headers.add("foo", "bar");
+    headers.add("Connection", "keep-alive");
+
+    EXPECT_EQ("bar", headers.get("foo"));
+    EXPECT_THROW(headers.get("Origin"), invalid_argument);
+}
+
+TEST(HeaderGroup, remove) {
+    HeaderGroup headers;
+    headers.add("name", "value");
+    headers.add("foo", "bar");
+    headers.add("Connection", "keep-alive");
+
+    EXPECT_EQ("keep-alive", headers.remove("Connection"));
+    EXPECT_THROW(headers.remove("Connection"), invalid_argument);
+    EXPECT_THROW(headers.get("Connection"), invalid_argument);
+
+}
+
+TEST(HeaderGroup, addCookie) {
+    HeaderGroup headers;
+    headers.addCookie("a=b");
+
+    vector<string> cookies = { "a=b" };
+    EXPECT_EQ(cookies, headers.getCookies());
+
+    headers.addCookie("another");
+    headers.addCookie("another");
+    headers.addCookie("last=true");
+
+    cookies = { "a=b", "another", "another", "last=true" };
+    EXPECT_EQ(cookies, headers.getCookies());
+}
+
+TEST(HeaderGroup, getCookies) {
+    vector<string> cookies;
+    HeaderGroup headers;
+    EXPECT_EQ(cookies, headers.getCookies());
+
+    headers.addCookie("a=b");
+    cookies = { "a=b" };
+    EXPECT_EQ(cookies, headers.getCookies());
+
+    headers.addCookie("another");
+    headers.addCookie("another");
+    headers.addCookie("last=true");
+    cookies = { "a=b", "another", "another", "last=true" };
+    EXPECT_EQ(cookies, headers.getCookies());
+}
+
+TEST(HeaderGroup, clearCookies) {
+    HeaderGroup headers;
+
+    headers.addCookie("a=b");
+    headers.addCookie("another");
+    headers.addCookie("another");
+    headers.addCookie("last=true");
+
+    vector<string> cookies = { "a=b", "another", "another", "last=true" };
+    EXPECT_EQ(cookies, headers.getCookies());
+
+    headers.clearCookies();
+    cookies.clear();
+    EXPECT_EQ(cookies, headers.getCookies());
+}
+
+TEST(HeaderGroup, toString) {
+    HeaderGroup headers;
+
+    stringstream ss;
+
+    headers.add("name", "value");
+    ss << "name: value";
+    ss << "\r\n";
+
+    headers.add("foo", "bar");
+    ss << "foo: bar";
+    ss << "\r\n";
+
+    headers.add("Connection", "keep-alive");
+    ss << "Connection: keep-alive";
+    ss << "\r\n";
+
+    headers.addCookie("a=b");
+    ss << "Set-Cookie: a=b";
+    ss << "\r\n";
+
+    headers.addCookie("another");
+    ss << "Set-Cookie: another";
+    ss << "\r\n";
+
+    headers.addCookie("another");
+    ss << "Set-Cookie: another";
+    ss << "\r\n";
     
-    EXPECT_TRUE(headers.contains("name"));
-    EXPECT_EQ(hpair("name", "value"), headers.getFirst("name"));
-}
+    headers.addCookie("last=true");
+    ss << "Set-Cookie: last=true";
+    ss << "\r\n";
 
-TEST(HeaderGroup, getFirst) {
-    HeaderGroup headers;
-    headers.add("foo", "bar");
-    headers.add("foo", "asdf");
+    string expected = ss.str();
 
-    EXPECT_EQ(hpair("foo", "bar"), headers.getFirst("foo"));
-}
-
-TEST(HeaderGroup, getLast) {
-    HeaderGroup headers;
-    headers.add("foo", "bar");
-    headers.add("foo", "asdf");
-
-    EXPECT_EQ(hpair("foo", "asdf"), headers.getLast("foo"));
-}
-
-TEST(HeaderGroup, getAll) {
-    HeaderGroup headers;
-    headers.add("foo", "bar");
-    headers.add("foo", "asdf");
-
-    vector<hpair> v  = { hpair("foo", "bar"), hpair("foo", "asdf") };
-    EXPECT_EQ(v, headers.getAll("foo"));
-}
-
-TEST(HeaderGroup, removeFirst) {
-    HeaderGroup headers;
-    headers.add("foo", "bar");
-    headers.add("foo", "asdf");
-
-    EXPECT_EQ(hpair("foo", "bar"), headers.removeFirst("foo"));
-    EXPECT_EQ(1, headers.count("foo"));
-    EXPECT_EQ(hpair("foo", "asdf"), headers.getFirst("foo"));
-}
-
-TEST(HeaderGroup, removeLast) {
-    HeaderGroup headers;
-    headers.add("foo", "bar");
-    headers.add("foo", "asdf");
-
-    EXPECT_EQ(hpair("foo", "asdf"), headers.removeLast("foo"));
-    EXPECT_EQ(1, headers.count("foo"));
-    EXPECT_EQ(hpair("foo", "bar"), headers.getFirst("foo"));
-}
-
-TEST(HeaderGroup, removeAll) {
-    HeaderGroup headers;
-    headers.add("foo", "bar");
-    headers.add("foo", "asdf");
-
-    vector<hpair> v = { hpair("foo", "bar"), hpair("foo", "asdf") };
-    EXPECT_EQ(v, headers.removeAll("foo"));
-    EXPECT_FALSE(headers.contains("foo"));
+    stringstream hs;
+    hs << headers;
+    string actual = hs.str();
+    
+    EXPECT_EQ(expected, actual);
 }

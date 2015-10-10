@@ -2,35 +2,32 @@
 #define HEADER_GROUP_H
 
 #include <string>
-#include <map>
 #include <vector>
 #include <utility>
+#include <ostream>
 
 using std::string;
-using std::multimap;
 using std::vector;
-
-using hpair = std::pair<string, string>;
-using map_t = multimap<string, string>;
+using std::ostream;
 
 class HeaderGroup {
 public:
     bool contains(const string& key) const;
-    unsigned count(const string& key) const;
-
     void add(const string& key, const string& val);
+    string get(const string& key) const;
+    string remove(const string& key);
 
-    hpair getFirst(const string& key) const;
-    hpair getLast(const string& key) const;
-    vector<hpair> getAll(const string& key) const;
+    void addCookie(const string& val);
+    const vector<string>& getCookies() const;
+    void clearCookies();
 
-    hpair removeFirst(const string& key);
-    hpair removeLast(const string& key);
-    vector<hpair> removeAll(const string& key);
-
+    friend ostream& operator<<(ostream& out, const HeaderGroup& headerGroup);
 private:
-    map_t _mmap;
-    map_t::const_iterator findLast(const string& key) const;
+    vector<string> _keys;
+    vector<string> _vals;
+    vector<string> _cookies;
+
+    const static string SET_COOKIE_KEY;
 };
 
 #endif

@@ -6,6 +6,7 @@
 
 #include "http_version.h"
 #include "response/status_code.h"
+#include "header_group.h"
 
 using std::unique_ptr;
 using std::ostream;
@@ -17,9 +18,14 @@ public:
 
     const HttpVersion& getHttpVersion() const;
     void setHttpVersion(const HttpVersion& httpVersion);
+
+    HeaderGroup& getHeaderGroup();
+    const HeaderGroup& getHeaderGroup() const;
+    void setHeaderGroup(const HeaderGroup& headerGroup);
 private:
     HttpVersion _httpVersion;
     StatusCode _statusCode;
+    HeaderGroup _headerGroup;
 };
 
 ostream& operator<<(ostream& out, const ResponseMessage& resp);
