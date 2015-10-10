@@ -13,6 +13,13 @@ using std::ostream;
 class HeaderGroup {
 public:
     bool contains(const string& key) const;
+
+    // headers with the same key are 
+    //stored in a comma separated list 
+    // RFC 7230 S3.2.2 https://tools.ietf.org/html/rfc7230#section-3.2.2
+    //
+    // Set-Cookie headers are not accepted by this 
+    // method. Use HeaderGroup::addCookie instead.
     void add(const string& key, const string& val);
     string get(const string& key) const;
     string remove(const string& key);
@@ -28,6 +35,8 @@ private:
     vector<string> _cookies;
 
     const static string SET_COOKIE_KEY;
+
+    vector<string>::size_type indexOf(const string& key) const;
 };
 
 #endif

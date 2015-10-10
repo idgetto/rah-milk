@@ -15,13 +15,12 @@ TEST(HeaderGroup, constructor) {
 TEST(HeaderGroup, add) {
     HeaderGroup headers;
     headers.add("name", "value");
+    headers.add("name", "other");
     headers.add("foo", "bar");
     headers.add("Connection", "keep-alive");
 
-    // TODO: This should not throw, it just adds the value to the list
-    EXPECT_THROW(headers.add("name", "other"), invalid_argument);
     EXPECT_THROW(headers.add("Set-Cookie", "a=b"), invalid_argument);
-    EXPECT_EQ("value", headers.get("name"));
+    EXPECT_EQ("value, other", headers.get("name"));
 }
 
 TEST(HeaderGroup, get) {
