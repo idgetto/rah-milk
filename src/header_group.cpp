@@ -15,8 +15,8 @@ bool HeaderGroup::contains(const string& key) const {
 }
 
 void HeaderGroup::add(const string& key, const string& val) {
-    if (contains(key)) {
-        auto index = indexOf(key);
+    auto index = indexOf(key);
+    if (index != _keys.size()) {
         _vals[index] = _vals[index].append(", ").append(val);
     }
     if (key == HeaderGroup::SET_COOKIE_KEY) {
@@ -28,18 +28,18 @@ void HeaderGroup::add(const string& key, const string& val) {
 }
 
 string HeaderGroup::get(const string& key) const {
-    if (!contains(key)) {
+    auto index = indexOf(key);
+    if (index == _keys.size()) {
         throw invalid_argument("key not found");
     }
-    auto index = indexOf(key);
     return _vals[index];
 }
 
 string HeaderGroup::remove(const string& key) {
-    if (!contains(key)) {
+    auto index = indexOf(key);
+    if (index == _keys.size()) {
         throw invalid_argument("key not found");
     }
-    auto index = indexOf(key);
     string val = _vals[index];
 
     _keys.erase(begin(_keys) + index);
