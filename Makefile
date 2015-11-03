@@ -61,6 +61,9 @@ $(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) $^ -o $@ 
 
 $(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) $(HEADERS) $(GTEST_HEADERS)
+	@mkdir -p build/request
+	@mkdir -p build/response
+	@mkdir -p build/thread
 	@mkdir -p $(BUILDDIR)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@ 
 
