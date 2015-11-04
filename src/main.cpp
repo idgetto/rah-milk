@@ -5,7 +5,9 @@
 int main() {
     RahMilkServer server;
 
-    server.on("/", [] (const RequestMessage& req, ResponseMessage& res) {
+    server.on("/", 
+              RequestMethod::GET, 
+              [] (const RequestMessage& req, ResponseMessage& res) {
         res.setStatusCode(StatusCode::OK_200);
     });
 

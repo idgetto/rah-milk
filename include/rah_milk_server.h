@@ -18,7 +18,9 @@ class RahMilkServer {
                                 const RequestMessage&, 
                                 ResponseMessage&
                             )>;
-        void on(const string& path, action_type action);
+        void on(const string& path,
+                const RequestMethod& method,
+                action_type action);
 };
 
 #endif
