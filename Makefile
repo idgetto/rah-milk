@@ -17,6 +17,7 @@ TESTDIR := test
 BUILDDIR := build
 EXECDIR := bin
 INCLUDEDIR := include
+LIBDIR := lib
 TARGET := $(EXECDIR)/run
 TEST_TARGET := $(EXECDIR)/test
 
@@ -27,7 +28,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 OBJECTS := $(filter-out build/main.o, $(OBJECTS))
 TEST_OBJECTS := $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTS:.$(SRCEXT)=.o))
 CFLAGS := -Wall -pedantic -std=c++11 
-LIB := -pthread
+LIB := -L$(LIBDIR) -pthread -lthreadpool
 INC := -I $(INCLUDEDIR)
 HEADERS := $(shell find $(INCLUDEDIR) -type f -name *.h)
 
@@ -58,7 +59,7 @@ test: $(TEST_TARGET)
 
 $(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a 
 	@echo "Linking..."
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) $^ -o $@ 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LIB) $(INC) $^ -o $@ 
 
 $(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) $(HEADERS) $(GTEST_HEADERS)
 	@mkdir -p build/request
