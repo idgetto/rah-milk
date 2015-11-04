@@ -28,13 +28,14 @@ public:
     const vector<string>& getCookies() const;
     void clearCookies();
 
+    const static string SET_COOKIE_KEY;
+
     friend ostream& operator<<(ostream& out, const HeaderGroup& headerGroup);
 private:
     vector<string> _keys;
     vector<string> _vals;
     vector<string> _cookies;
 
-    const static string SET_COOKIE_KEY;
 
     vector<string>::size_type indexOf(const string& key) const;
 };
