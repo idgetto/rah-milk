@@ -21,6 +21,11 @@ class RahMilkServer {
         void on(const string& path,
                 const RequestMethod& method,
                 action_type action);
+
+    private:
+        unsigned short _port;
+
+        void _listen(unsigned short port);
 };
 
 #endif
