@@ -41,15 +41,16 @@ const string RequestMethod::OPTIONS_STR = "OPTIONS";
 const string RequestMethod::CONNECT_STR = "CONNECT";
 
 const RequestMethod RequestMethod::GET(GET_STR);
-const RequestMethod RequestMethod::HEAD(GET_STR);
-const RequestMethod RequestMethod::POST(GET_STR);
-const RequestMethod RequestMethod::PUT(GET_STR);
-const RequestMethod RequestMethod::DELETE(GET_STR);
-const RequestMethod RequestMethod::TRACE(GET_STR);
-const RequestMethod RequestMethod::OPTIONS(GET_STR);
-const RequestMethod RequestMethod::CONNECT(GET_STR);
+const RequestMethod RequestMethod::HEAD(HEAD_STR);
+const RequestMethod RequestMethod::POST(POST_STR);
+const RequestMethod RequestMethod::PUT(PUT_STR);
+const RequestMethod RequestMethod::DELETE(DELETE_STR);
+const RequestMethod RequestMethod::TRACE(TRACE_STR);
+const RequestMethod RequestMethod::OPTIONS(OPTIONS_STR);
+const RequestMethod RequestMethod::CONNECT(CONNECT_STR);
 
 ostream& operator<<(ostream& out, const RequestMethod& requestMethod) {
+    out << requestMethod.getStr();
     return out;
 }
 

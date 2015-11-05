@@ -6,6 +6,7 @@
 
 #include "request/request_message.h"
 #include "response/response_message.h"
+#include "request/request_target.h"
 
 using std::string;
 using std::function;
