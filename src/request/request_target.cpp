@@ -10,3 +10,8 @@ RequestTarget::RequestTarget(const string& path,
 bool RequestTarget::matches(const RequestTarget& other) const {
     return _path == other._path && _method == other._method;
 }
+
+bool RequestTarget::operator==(const RequestTarget& other) const {
+    return _path == other._path &&
+           _method == other._method;
+}

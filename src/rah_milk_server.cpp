@@ -7,7 +7,7 @@ void RahMilkServer::listen(unsigned short port) {
 
 void RahMilkServer::on(const string& path,
                        const RequestMethod& method,
-                       Router::action_type action) {
+                       const RequestAction& action) {
     RequestTarget target(path, method);
     _router.connect(target, action);
 }

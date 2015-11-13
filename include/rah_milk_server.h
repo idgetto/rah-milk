@@ -6,6 +6,7 @@
 #include "request/request_message.h"
 #include "response/response_message.h"
 #include "request/request_target.h"
+#include "request/request_action.h"
 #include "request/router.h"
 
 using std::string;
@@ -17,7 +18,7 @@ class RahMilkServer {
 
         void on(const string& path,
                 const RequestMethod& method,
-                Router::action_type action);
+                const RequestAction& action);
 
     private:
         unsigned short _port;
