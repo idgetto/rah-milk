@@ -44,7 +44,6 @@ TEST(Router, disconnectNone) {
         res.setStatusCode(StatusCode::OK_200);
     });
 
-    router.connect(target, action);
     EXPECT_THROW(router.disconnect(target), std::invalid_argument);
 }
 
@@ -59,6 +58,6 @@ TEST(Router, findRoute) {
     router.connect(target, action);
     
     Route route = router.findRoute(target);
-    // EXPECT_EQ(target, route.getRequestTarget());
-    // EXPECT_EQ(action, route.getAction());
+    EXPECT_EQ(target, route.getTarget());
+    EXPECT_EQ(action, route.getAction());
 }
