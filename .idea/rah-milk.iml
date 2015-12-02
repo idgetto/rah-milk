@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Makefile" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/basic_regex.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/header_group.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/http_version.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/invalid_http_version_exception.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/rah_milk_server.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/request/request_action.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/request/request_message.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/request/request_method.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/request/request_target.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/request/route.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/request/router.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/response/response_message.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/response/status_code.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/include/test/first_fixture.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lib/libthreadpool.a" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/basic_regex.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/header_group.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/http_version.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rah_milk_server.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/request/request_action.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/request/request_message.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/request/request_method.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/request/request_target.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/request/route.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/request/router.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/response/response_message.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/response/status_code.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/first_test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/header_group_test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/http_version_test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/request/request_message_test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/request/request_method_test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/request/request_target_test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/request/router_test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/response/response_message_test.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/response/status_code_test.cpp" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/include" />
+          <root url="file://$MODULE_DIR$/lib" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include/objc" />
+          <root url="file:///usr/local/include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/include" />
+          <root url="file://$MODULE_DIR$/lib" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/4.8/include/objc" />
+          <root url="file:///usr/local/include" />
+        </SOURCES>
+        <excluded>
+          <root url="file://$MODULE_DIR$/include/http_version.h" />
+          <root url="file://$MODULE_DIR$/include/basic_regex.h" />
+          <root url="file://$MODULE_DIR$/include/header_group.h" />
+          <root url="file://$MODULE_DIR$/include/rah_milk_server.h" />
+          <root url="file://$MODULE_DIR$/include/invalid_http_version_exception.h" />
+          <root url="file://$MODULE_DIR$/include/request/router.h" />
+          <root url="file://$MODULE_DIR$/include/request/route.h" />
+          <root url="file://$MODULE_DIR$/include/request/request_message.h" />
+          <root url="file://$MODULE_DIR$/include/request/request_action.h" />
+          <root url="file://$MODULE_DIR$/include/request/request_method.h" />
+          <root url="file://$MODULE_DIR$/include/request/request_target.h" />
+          <root url="file://$MODULE_DIR$/include/response/status_code.h" />
+          <root url="file://$MODULE_DIR$/include/response/response_message.h" />
+          <root url="file://$MODULE_DIR$/include/test/first_fixture.h" />
+          <root url="file://$MODULE_DIR$/lib/libthreadpool.a" />
+        </excluded>
+      </library>
+    </orderEntry>
+  </component>
+</module>

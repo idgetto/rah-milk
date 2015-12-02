@@ -34,6 +34,8 @@ TEST(Router, disconnect) {
 
     router.connect(target, action);
     EXPECT_NO_THROW(router.disconnect(target));
+    EXPECT_THROW(router.findRoute(target), std::invalid_argument);
+    EXPECT_NO_THROW(router.connect(target, action));
 }
 
 TEST(Router, disconnectNone) {
@@ -56,7 +58,7 @@ TEST(Router, findRoute) {
     });
 
     router.connect(target, action);
-    
+
     Route route = router.findRoute(target);
     EXPECT_EQ(target, route.getTarget());
     EXPECT_EQ(action, route.getAction());

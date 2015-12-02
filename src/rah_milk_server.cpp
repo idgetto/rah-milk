@@ -1,4 +1,5 @@
 #include "rah_milk_server.h"
+#include <iostream>
 
 void RahMilkServer::listen(unsigned short port) {
     _port = port;

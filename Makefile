@@ -7,7 +7,7 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
 # # Set Google Test's header directory as a system directory, such that
 # # the compiler doesn't generate warnings in Google Test headers.
 CPPFLAGS += -isystem $(GTEST_DIR)/include
-# 
+#
 # # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -Wextra -std=c++11 -pthread
 
@@ -16,8 +16,8 @@ SRCDIR := src
 TESTDIR := test
 BUILDDIR := build
 EXECDIR := bin
-INCLUDEDIR := include
-LIBDIR := lib
+INCLUDEDIR := include/
+LIBDIR := lib/
 TARGET := $(EXECDIR)/run
 TEST_TARGET := $(EXECDIR)/test
 
@@ -27,24 +27,24 @@ TESTS := $(shell find $(TESTDIR) -type f -name *_test.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 OBJECTS := $(filter-out build/main.o, $(OBJECTS))
 TEST_OBJECTS := $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTS:.$(SRCEXT)=.o))
-CFLAGS := -Wall -pedantic -std=c++11 
-LIB := -L$(LIBDIR) -pthread -lthreadpool
-INC := -I $(INCLUDEDIR)
+CFLAGS := -Wall -pedantic -std=c++11
+LIB := -L$(LIBDIR)/thread-pool -pthread -lthreadpool
+INC := -I $(INCLUDEDIR) -I $(LIBDIR)/thread-pool
 HEADERS := $(shell find $(INCLUDEDIR) -type f -name *.h)
 
 TEST_TARGETS := $(EXECDIR)/$(basename $(notdir $(TESTS)))
 
-# 
+#
 # sample1.o : $(USER_DIR)/sample1.cc $(USER_DIR)/sample1.h $(GTEST_HEADERS)
 # 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1.cc
-# 
+#
 # sample1_unittest.o : $(USER_DIR)/sample1_unittest.cc \
 #                      $(USER_DIR)/sample1.h $(GTEST_HEADERS)
 # 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1_unittest.cc
-# 
+#
 # sample1_unittest : sample1.o sample1_unittest.o gtest_main.a
 # 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
-# 
+#
 
 $(TARGET): build/main.o $(OBJECTS)
 	@echo "Linking..."
@@ -52,57 +52,57 @@ $(TARGET): build/main.o $(OBJECTS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) $(HEADERS) $(GTEST_HEADERS)
 	@mkdir -p $(BUILDDIR)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@ 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@
 
 test: $(TEST_TARGET)
 	./bin/test
 
-$(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a 
+$(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a
 	@echo "Linking..."
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LIB) $(INC) $^ -o $@ 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LIB) $(INC) $^ -o $@
 
 $(BUILDDIR)/%.o: $(TESTDIR)/%.$(SRCEXT) $(HEADERS) $(GTEST_HEADERS)
 	@mkdir -p build/request
 	@mkdir -p build/response
 	@mkdir -p build/thread
 	@mkdir -p $(BUILDDIR)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@ 
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c $< -o $@
 
 clean:
-	@echo "Cleaning..."; 
+	@echo "Cleaning...";
 	find $(BUILDDIR) $(EXECDIR) -type f -exec rm {} +
 
 .PHONY: clean test
 
 # # Where to find user code.
 # USER_DIR = ../samples
-# 
-# 
+#
+#
 # # All tests produced by this Makefile.  Remember to add new tests you
 # # created to the list.
 # TESTS = sample1_unittest
-# 
+#
 
 # # House-keeping build targets.
-# 
+#
 # all : $(TESTS)
-# 
+#
 # clean :
 # 	rm -f $(TESTS) gtest.a gtest_main.a *.o
-# 
+#
 # # Builds gtest.a and gtest_main.a.
-# 
+#
 # # Usually you shouldn't tweak such internal variables, indicated by a
 # # trailing _.
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
-# 
+#
 # # For simplicity and to avoid depending on Google Test's
 # # implementation details, the dependencies specified below are
 # # conservative and not optimized.  This is fine as Google Test
 # # compiles fast and for ordinary users its source rarely changes.
 build/gtest-all.o : $(GTEST_SRCS_)
 	$(CXX) $(CPPFLAGS) -o $@ -I$(GTEST_DIR) $(CXXFLAGS) -c \
-            $(GTEST_DIR)/src/gtest-all.cc 
+            $(GTEST_DIR)/src/gtest-all.cc
 
 build/gtest_main.o : $(GTEST_SRCS_)
 	$(CXX) $(CPPFLAGS) -o $@ -I$(GTEST_DIR) $(CPPFLAGS) -c \
@@ -117,14 +117,14 @@ build/gtest_main.a : build/gtest-all.o build/gtest_main.o
 # # Builds a sample test.  A test should link with either gtest.a or
 # # gtest_main.a, depending on whether it defines its own main()
 # # function.
-# 
+#
 # sample1.o : $(USER_DIR)/sample1.cc $(USER_DIR)/sample1.h $(GTEST_HEADERS)
 # 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1.cc
-# 
+#
 # sample1_unittest.o : $(USER_DIR)/sample1_unittest.cc \
 #                      $(USER_DIR)/sample1.h $(GTEST_HEADERS)
 # 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $(USER_DIR)/sample1_unittest.cc
-# 
+#
 # sample1_unittest : sample1.o sample1_unittest.o gtest_main.a
 # 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
-# 
+#

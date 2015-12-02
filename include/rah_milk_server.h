@@ -8,6 +8,7 @@
 #include "request/request_target.h"
 #include "request/request_action.h"
 #include "request/router.h"
+#include "thread_pool.h"
 
 using std::string;
 using std::function;
@@ -23,6 +24,7 @@ class RahMilkServer {
     private:
         unsigned short _port;
         Router _router;
+        ThreadPool _threadPool;
 
         void _listen(unsigned short port);
 };

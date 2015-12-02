@@ -16,6 +16,7 @@ void Router::disconnect(const RequestTarget target) {
     if (routes.find(target) == end(routes)) {
         throw invalid_argument("Could not find route to disconnect");
     }
+    routes.erase(target);
 }
 
 Route Router::findRoute(const RequestTarget& target) const {
@@ -23,5 +24,5 @@ Route Router::findRoute(const RequestTarget& target) const {
         throw invalid_argument("Could not find route");
     }
     RequestAction action = routes.at(target);
-    return Route(target, action); 
+    return Route(target, action);
 }
