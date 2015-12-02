@@ -46,6 +46,9 @@ TEST_TARGETS := $(EXECDIR)/$(basename $(notdir $(TESTS)))
 # 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -lpthread $^ -o $@
 #
 
+run: $(TARGET)
+	./bin/run
+
 $(TARGET): build/main.o $(OBJECTS)
 	@echo "Linking..."
 	$(CXX) $^ -o $@ $(LIB)
