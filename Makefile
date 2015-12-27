@@ -17,7 +17,7 @@ TESTDIR := test
 BUILDDIR := build
 EXECDIR := bin
 INCLUDEDIR := include/
-LIBDIR := lib/
+LIBDIR := lib
 TARGET := $(EXECDIR)/run
 TEST_TARGET := $(EXECDIR)/test
 
