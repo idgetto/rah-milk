@@ -1,9 +1,12 @@
 #include "rah_milk_server.h"
 #include <iostream>
+#include <string>
 
 void RahMilkServer::listen(unsigned short port) {
     _port = port;
-    _listen(_port);
+
+    _server.addListener(this);
+    _server.listen(port);
 }
 
 void RahMilkServer::on(const string& path,
@@ -13,6 +16,8 @@ void RahMilkServer::on(const string& path,
     _router.connect(target, action);
 }
 
-void RahMilkServer::_listen(unsigned short port) {
-    // create socket, bind to port, and accept connections
+void RahMilkServer::onHttpRequest(int fd) const {
+    std::string msg = "Hello, World!";
+    send(fd, msg.c_str(), msg.size(), 0);
+    close(fd);
 }

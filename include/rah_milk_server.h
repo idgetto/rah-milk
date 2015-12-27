@@ -9,11 +9,13 @@
 #include "request/request_action.h"
 #include "request/router.h"
 #include "thread_pool.h"
+#include "basic_http_server.h"
+#include "i_http_request_listener.h"
 
 using std::string;
 using std::function;
 
-class RahMilkServer {
+class RahMilkServer : public IHttpRequestListener {
     public:
         void listen(unsigned short port);
 
@@ -21,12 +23,13 @@ class RahMilkServer {
                 const RequestMethod& method,
                 const RequestAction& action);
 
+        void onHttpRequest(int fd) const;
+
     private:
+        BasicHttpServer _server;
         unsigned short _port;
         Router _router;
         ThreadPool _threadPool;
-
-        void _listen(unsigned short port);
 };
 
 #endif
