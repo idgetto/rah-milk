@@ -32,7 +32,7 @@ class HttpVersion {
 public:
     const static sregex HTTP_VERSION_CAPTURE_REGEX;
 
-    HttpVersion() {}
+    HttpVersion();
     HttpVersion(const string& httpVersionString);
 
     int getMajorVersion() const;

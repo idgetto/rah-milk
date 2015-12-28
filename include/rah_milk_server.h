@@ -39,10 +39,14 @@ class RahMilkServer : public IHttpRequestListener {
         void onHttpRequest(int fd);
 
     private:
+        static constexpr unsigned short REQUEST_SIZE = 8192;
+
         BasicHttpServer _server;
         unsigned short _port;
         Router _router;
         ThreadPool _threadPool;
+
+        string readRequest(int fd);
 };
 
 #endif

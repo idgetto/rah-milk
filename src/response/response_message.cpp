@@ -1,5 +1,13 @@
 #include "response/response_message.h"
 
+const string& ResponseMessage::getMessageBody() const {
+    return _body;
+}
+
+void ResponseMessage::setMessageBody(const string& body) {
+    _body = body;
+}
+
 const StatusCode& ResponseMessage::getStatusCode() const {
     return _statusCode;
 }
@@ -38,6 +46,9 @@ ostream& operator<<(ostream& out, const ResponseMessage& resp) {
 
     // add the headers
     ss << resp.getHeaderGroup();
+
+    ss << "\r\n";
+    ss << resp.getMessageBody();
 
     return out << ss.str();
 }

@@ -12,7 +12,7 @@ using std::unique_ptr;
 
 class RequestMessage {
 public:
-    static unique_ptr<RequestMessage> fromRequestString(const string& req);        
+    static unique_ptr<RequestMessage> fromString(const string& req);
 
 private:
     unique_ptr<RequestMethod> _requestMethod;

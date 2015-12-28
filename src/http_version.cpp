@@ -12,11 +12,16 @@ using std::stringstream;
 
 const sregex HttpVersion::HTTP_VERSION_CAPTURE_REGEX = sregex::compile(HTTP_VERSION_CAPTURE);
 
+HttpVersion::HttpVersion() {
+    _majorVersion = 1;
+    _minorVersion = 1;
+}
+
 HttpVersion::HttpVersion(const string& httpVersionString) {
     smatch match;
 
-    if (!regex_match(httpVersionString, 
-                        match, 
+    if (!regex_match(httpVersionString,
+                        match,
                         HttpVersion::HTTP_VERSION_CAPTURE_REGEX)) {
         throw InvalidHttpVersionException(httpVersionString);
     } else {
@@ -34,8 +39,8 @@ int HttpVersion::getMinorVersion() const {
 }
 
 ostream& operator<<(ostream& out, const HttpVersion& httpVersion) {
-    return out << "HTTP/" 
-               << httpVersion.getMajorVersion() 
-               << "." 
+    return out << "HTTP/"
+               << httpVersion.getMajorVersion()
+               << "."
                << httpVersion.getMinorVersion();
 }
