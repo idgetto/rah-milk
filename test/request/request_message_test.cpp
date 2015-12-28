@@ -3,7 +3,7 @@
 
 using std::unique_ptr;
 
-TEST(RequestMessage, fromRequestString) {
-    unique_ptr<RequestMessage> req = RequestMessage::fromRequestString("");
+TEST(RequestMessage, fromString) {
+    unique_ptr<RequestMessage> req = RequestMessage::fromString("");
     EXPECT_NE(nullptr, req);
 }

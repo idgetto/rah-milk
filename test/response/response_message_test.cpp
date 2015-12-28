@@ -21,6 +21,6 @@ TEST(ResponseMessage, toString) {
     stringstream expected;
     expected << "HTTP/1.1 200 OK\r\n"
              << "User-Agent: Isaac\r\n"
-             << "Connection: keep-alive\r\n";
+             << "Connection: keep-alive\r\n\r\n";
     EXPECT_EQ(expected.str(), actual.str());
 }
