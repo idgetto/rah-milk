@@ -2,7 +2,7 @@
 #include "basic_http_server.h"
 
 class MockHttpRequestListener : public IHttpRequestListener {
-    void onHttpRequest(int fd) const {}
+    void onHttpRequest(int fd) {}
 };
 
 TEST(BasicHttpServer, addListener) {

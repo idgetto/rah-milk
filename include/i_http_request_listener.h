@@ -5,7 +5,7 @@
 
 class IHttpRequestListener {
     public:
-        virtual void onHttpRequest(int fd) const = 0;
+        virtual void onHttpRequest(int fd) = 0;
 };
 
 #endif

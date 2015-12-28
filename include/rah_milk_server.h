@@ -36,7 +36,7 @@ class RahMilkServer : public IHttpRequestListener {
                 const RequestMethod& method,
                 const RequestAction& action);
 
-        void onHttpRequest(int fd) const;
+        void onHttpRequest(int fd);
 
     private:
         BasicHttpServer _server;

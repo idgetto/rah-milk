@@ -16,8 +16,12 @@ void RahMilkServer::on(const string& path,
     _router.connect(target, action);
 }
 
-void RahMilkServer::onHttpRequest(int fd) const {
-    std::string msg = "Hello, World!";
-    send(fd, msg.c_str(), msg.size(), 0);
-    close(fd);
+void RahMilkServer::onHttpRequest(int fd) {
+    _threadPool.post([fd] {
+        std::string msg = "Hello, World!";
+        send(fd, msg.c_str(), msg.size(), 0);
+        close(fd);
+
+        return 0;
+    });
 }

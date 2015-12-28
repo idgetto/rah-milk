@@ -24,11 +24,16 @@ TEST_TARGET := $(EXECDIR)/test
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 TESTS := $(shell find $(TESTDIR) -type f -name *_test.$(SRCEXT))
+
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 OBJECTS := $(filter-out build/main.o, $(OBJECTS))
+OBJECTS := $(OBJECTS) lib/thread-pool/libthreadpool.a
+
 TEST_OBJECTS := $(patsubst $(TESTDIR)/%,$(BUILDDIR)/%,$(TESTS:.$(SRCEXT)=.o))
+TEST_OBJECTS := $(TEST_OBJECTS) build/gtest_main.a
+
 CFLAGS := -Wall -pedantic -std=c++11
-LIB := -L$(LIBDIR)/thread-pool -pthread -lthreadpool
+LIB := -L$(LIBDIR)/thread-pool -lthreadpool -pthread
 INC := -I $(INCLUDEDIR) -I $(LIBDIR)/thread-pool
 HEADERS := $(shell find $(INCLUDEDIR) -type f -name *.h)
 
@@ -51,7 +56,7 @@ run: $(TARGET)
 
 $(TARGET): build/main.o $(OBJECTS)
 	@echo "Linking..."
-	$(CXX) $^ -o $@ $(LIB)
+	$(CXX) $^ $(LIB) -o $@
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) $(HEADERS) $(GTEST_HEADERS)
 	@mkdir -p $(BUILDDIR)
@@ -60,7 +65,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT) $(HEADERS) $(GTEST_HEADERS)
 test: $(TEST_TARGET)
 	./bin/test
 
-$(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS) build/gtest_main.a
+$(TEST_TARGET): $(TEST_OBJECTS) $(OBJECTS)
 	@echo "Linking..."
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LIB) $(INC) $^ -o $@
 

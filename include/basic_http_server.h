@@ -10,19 +10,19 @@ using std::vector;
 
 class BasicHttpServer {
     static constexpr int BACKLOG = 10;
-    vector<const IHttpRequestListener *> _listeners;
+    vector<IHttpRequestListener *> _listeners;
 
     public:
         // port in range of 1-65535
         // https://en.wikipedia.org/wiki/Registered_port
         void listen(const unsigned short port);
 
-        void addListener(const IHttpRequestListener *listener);
+        void addListener(IHttpRequestListener *listener);
         void removeListener(const IHttpRequestListener *listener);
-        vector<const IHttpRequestListener *> getListeners() const;
+        vector<IHttpRequestListener *> getListeners() const;
 
     private:
-        void notifyListeners(int fd) const;
+        void notifyListeners(int fd) ;
         void *get_in_addr(struct sockaddr *sa);
         static void sigchld_handler(int s);
 };

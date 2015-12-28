@@ -124,7 +124,7 @@ void *BasicHttpServer::get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
-void BasicHttpServer::addListener(const IHttpRequestListener *listener) {
+void BasicHttpServer::addListener(IHttpRequestListener *listener) {
     _listeners.push_back(listener);
 }
 
@@ -137,11 +137,11 @@ void BasicHttpServer::removeListener(const IHttpRequestListener *listener) {
     _listeners.erase(it);
 }
 
-vector<const IHttpRequestListener *> BasicHttpServer::getListeners() const {
+vector<IHttpRequestListener *> BasicHttpServer::getListeners() const {
     return _listeners;
 }
 
-void BasicHttpServer::notifyListeners(int fd) const {
+void BasicHttpServer::notifyListeners(int fd) {
     for (auto listener : _listeners) {
             listener->onHttpRequest(fd);
     }
